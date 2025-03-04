@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import Search from "./components/Search";
 import Spinner from "./components/Spinner";
+import MovieCard from "./components/MovieCard";
+import { Movie, ApiResponse } from "./types";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -11,15 +13,6 @@ const API_OPTIONS = {
     Authorization: `Bearer ${API_KEY}`,
   },
 };
-
-interface Movie {
-  id: number;
-  title: string;
-}
-
-interface ApiResponse {
-  results: Movie[];
-}
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -84,9 +77,7 @@ const App = () => {
           ) : (
             <ul>
               {movieList.map((movie) => (
-                <p key={movie.id} className="text-white">
-                  {movie.title}
-                </p>
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </ul>
           )}
