@@ -9,16 +9,18 @@ interface MovieCardProps {
 const MovieCard: React.FC<MovieCardProps> = ({
   movie: { title, poster_path, release_date, original_language, vote_average },
 }) => {
+  const posterImage = poster_path
+    ? `url(https://image.tmdb.org/t/p/w500/${poster_path})`
+    : "url(/no-movie-1.png)";
+
   return (
     <div className="movie-card">
-      <img
-        src={
-          poster_path
-            ? `https://image.tmdb.org/t/p/w500/${poster_path}`
-            : "/no-movie.png"
-        }
-        alt={title}
-      />
+      <div
+        className="h-80 w-full bg-cover bg-center max-md:h-120 max-sm:h-110"
+        style={{
+          backgroundImage: posterImage,
+        }}
+      ></div>
 
       <div className="mt-4">
         <h3>{title}</h3>
