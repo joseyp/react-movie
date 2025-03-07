@@ -1,10 +1,10 @@
 import { Client, Databases, ID, Query } from "appwrite";
 
-import { Movie } from "./types";
-
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID;
+
+import { Movie } from "./types";
 
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
@@ -32,6 +32,22 @@ export const updateSearchCount = async (searchTerm: string, movie: Movie) => {
         poster_url: `https://image.tmdb.org/t/p/w500/${movie.poster_path}`,
       });
     }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getTrendingMovies = async (): Promise<Movie[] | undefined> => {
+  try {
+    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+      Query.limit(5),
+      Query.orderDesc("count"),
+    ]);
+
+    return result.documents.map((doc) => ({
+      id: doc.movie_id,
+      poster_path: doc.poster_url,
+    }));
   } catch (error) {
     console.error(error);
   }
